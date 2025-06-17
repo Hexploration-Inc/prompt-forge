@@ -78,7 +78,7 @@ The core innovation is our **AI Prompt Agent**, which takes a simple user idea a
 - **Unified Agent Interface:** A single input bar for complex, multi-modal requests.
 - **User Accounts & Authentication:** Secure user registration, login, and profiles.
 - **Tiered Subscriptions & Credits:** A flexible billing system with a free tier and paid plans.
-- **Scalable Worker Infrastructure:** A robust backend to manage a job queue and scale GPU instances on demand (e.g., via RunPod).
+- **Scalable Worker Infrastructure:** A robust backend to manage a job queue and scale GPU instances on demand (e.g., via beam.cloud).
 - **Public Showcase Gallery:** A curated gallery of the best community creations.
 - **Developer API:** A documented API for third-party integrations.
 - **Content Moderation:** Automated systems to ensure a safe platform.
