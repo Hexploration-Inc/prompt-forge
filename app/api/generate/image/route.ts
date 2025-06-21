@@ -10,12 +10,19 @@ export async function POST(request: Request) {
     }
 
     // Get the prompt from the user's request
-    const { prompt, negativePrompt } = await request.json();
-    console.log("API route received:", { prompt, negativePrompt });
+    const { prompt, negativePrompt, width, height } = await request.json();
+    console.log("API route received:", {
+      prompt,
+      negativePrompt,
+      width,
+      height,
+    });
 
     const payload = {
       prompt,
       negative_prompt: negativePrompt,
+      width,
+      height,
     };
 
     // Make a single, direct call to the synchronous Beam endpoint
