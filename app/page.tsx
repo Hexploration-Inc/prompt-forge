@@ -35,10 +35,20 @@ const stylePresets = [
   },
 ];
 
+// Define aspect ratios
+const aspectRatios = [
+  { name: "Square", width: 1024, height: 1024 },
+  { name: "Portrait", width: 896, height: 1152 },
+  { name: "Widescreen", width: 1152, height: 896 },
+];
+
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [negativePrompt, setNegativePrompt] = useState("");
   const [selectedStyle, setSelectedStyle] = useState(stylePresets[0]);
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState(
+    aspectRatios[0]
+  );
 
   // State is now much simpler
   const [loading, setLoading] = useState(false);
@@ -61,7 +71,12 @@ export default function Home() {
       const response = await fetch("/api/generate/image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: finalPrompt, negativePrompt }),
+        body: JSON.stringify({
+          prompt: finalPrompt,
+          negativePrompt,
+          width: selectedAspectRatio.width,
+          height: selectedAspectRatio.height,
+        }),
       });
 
       if (!response.ok) {
@@ -134,6 +149,26 @@ export default function Home() {
                     disabled={loading}
                   >
                     {style.name}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-3">
+              <Label>Aspect Ratio</Label>
+              <div className="grid grid-cols-3 gap-2">
+                {aspectRatios.map((ratio) => (
+                  <Button
+                    key={ratio.name}
+                    variant={
+                      selectedAspectRatio.name === ratio.name
+                        ? "secondary"
+                        : "outline"
+                    }
+                    className="h-auto py-2 px-3 text-xs"
+                    onClick={() => setSelectedAspectRatio(ratio)}
+                    disabled={loading}
+                  >
+                    {ratio.name}
                   </Button>
                 ))}
               </div>
