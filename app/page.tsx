@@ -13,9 +13,32 @@ function Spinner() {
   );
 }
 
+// Define our style presets
+const stylePresets = [
+  {
+    name: "Cinematic",
+    prompt:
+      "cinematic, dramatic lighting, high detail, intricate, 8k, photorealistic",
+  },
+  {
+    name: "Anime",
+    prompt: "anime, cel-shaded, vibrant colors, detailed, studio ghibli style",
+  },
+  {
+    name: "Photorealistic",
+    prompt: "photorealistic, 85mm lens, f/1.8, photography, ultra detail",
+  },
+  {
+    name: "Fantasy",
+    prompt:
+      "fantasy art, epic, detailed, intricate, matte painting, concept art",
+  },
+];
+
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [negativePrompt, setNegativePrompt] = useState("");
+  const [selectedStyle, setSelectedStyle] = useState(stylePresets[0]);
 
   // State is now much simpler
   const [loading, setLoading] = useState(false);
@@ -27,11 +50,18 @@ export default function Home() {
     setImageUrl(null);
     setError(null);
 
+    // Combine the user's prompt with the selected style's keywords
+    const finalPrompt = selectedStyle
+      ? `${prompt}, ${selectedStyle.prompt}`
+      : prompt;
+
+    console.log("Generating with final prompt:", finalPrompt);
+
     try {
       const response = await fetch("/api/generate/image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, negativePrompt }),
+        body: JSON.stringify({ prompt: finalPrompt, negativePrompt }),
       });
 
       if (!response.ok) {
@@ -87,6 +117,26 @@ export default function Home() {
                 onChange={(e) => setNegativePrompt(e.target.value)}
                 disabled={loading}
               />
+            </div>
+            <div className="space-y-3">
+              <Label>Style</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {stylePresets.map((style) => (
+                  <Button
+                    key={style.name}
+                    variant={
+                      selectedStyle?.name === style.name
+                        ? "secondary"
+                        : "outline"
+                    }
+                    className="h-auto py-2 px-3 text-xs"
+                    onClick={() => setSelectedStyle(style)}
+                    disabled={loading}
+                  >
+                    {style.name}
+                  </Button>
+                ))}
+              </div>
             </div>
             <Button
               className="w-full"
